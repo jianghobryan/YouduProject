@@ -2,10 +2,12 @@ package com.jarchie.youduproject.activity;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.jarchie.youduproject.R;
 import com.jarchie.youduproject.activity.base.BaseActivity;
 import com.jarchie.youduproject.view.fragment.home.HomeFragment;
@@ -21,7 +23,7 @@ import com.jarchie.youduproject.view.fragment.home.MineFragment;
  * 描述:     创建首页所有的Fragment,以及
  */
 
-public class HomeActivity extends BaseActivity implements View.OnClickListener{
+public class HomeActivity extends BaseActivity implements View.OnClickListener {
     /**
      * Fragment相关
      */
@@ -49,6 +51,10 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener{
         //添加默认要显示的Fragment
         mHomeFragment = new HomeFragment();
         fm = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fm.beginTransaction();
+        //replace是先remove,然后再进行add,这里始终会让栈中只有一个fragment,每次都会新建我们的实例
+        fragmentTransaction.replace(R.id.content_layout,mHomeFragment);
+        fragmentTransaction.commit();
     }
 
     /**
@@ -76,9 +82,71 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener{
         super.onDestroy();
     }
 
+    /**
+     * 用来隐藏具体的fragment
+     * @param fragment
+     * @param ft
+     */
+    private void hideFragment(Fragment fragment,FragmentTransaction ft){
+        if (fragment != null){
+            ft.hide(fragment);
+        }
+    }
+
     @Override
     public void onClick(View view) {
-
+        //完成Fragment的显示或是隐藏,这里采用show或是hide的方式
+        FragmentTransaction fragmentTransaction = fm.beginTransaction();
+        switch (view.getId()) {
+            case R.id.home_layout_view:
+                mHomeView.setBackgroundResource(R.drawable.comui_tab_home_selected);
+                mPondView.setBackgroundResource(R.drawable.comui_tab_pond);
+                mMessageView.setBackgroundResource(R.drawable.comui_tab_message);
+                mMineView.setBackgroundResource(R.drawable.comui_tab_person);
+                //隐藏其它两个不显示的fragment
+                hideFragment(mMessageFragment,fragmentTransaction);
+                hideFragment(mMineFragment,fragmentTransaction);
+                //将我们的HomeFragment显示到用户眼前
+                if (mHomeFragment == null){
+                    mHomeFragment = new HomeFragment();
+                    fragmentTransaction.add(R.id.content_layout,mHomeFragment);
+                }else {
+                    //已经创建过了,直接显示即可
+                    fragmentTransaction.show(mHomeFragment);
+                }
+                break;
+            case R.id.message_layout_view:
+                mMessageView.setBackgroundResource(R.drawable.comui_tab_message_selected);
+                mHomeView.setBackgroundResource(R.drawable.comui_tab_home);
+                mPondView.setBackgroundResource(R.drawable.comui_tab_pond);
+                mMineView.setBackgroundResource(R.drawable.comui_tab_person);
+                //隐藏其它不显示的fragment
+                hideFragment(mHomeFragment,fragmentTransaction);
+                hideFragment(mMineFragment,fragmentTransaction);
+                if (mMessageFragment == null){
+                    mMessageFragment = new MessageFragment();
+                    fragmentTransaction.add(R.id.content_layout,mMessageFragment);
+                }else {
+                    fragmentTransaction.show(mMessageFragment);
+                }
+                break;
+            case R.id.mine_layout_view:
+                mMineView.setBackgroundResource(R.drawable.comui_tab_person_selected);
+                mHomeView.setBackgroundResource(R.drawable.comui_tab_home);
+                mPondView.setBackgroundResource(R.drawable.comui_tab_pond);
+                mMessageView.setBackgroundResource(R.drawable.comui_tab_message);
+                //隐藏其它不显示的fragment
+                hideFragment(mHomeFragment,fragmentTransaction);
+                hideFragment(mMessageFragment,fragmentTransaction);
+                if (mMineFragment == null){
+                    mMineFragment = new MineFragment();
+                    fragmentTransaction.add(R.id.content_layout,mMineFragment);
+                }else {
+                    fragmentTransaction.show(mMineFragment);
+                }
+                break;
+        }
+        fragmentTransaction.commit();
     }
 
 }
