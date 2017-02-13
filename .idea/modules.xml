@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/YouduProject.iml" filepath="$PROJECT_DIR$/YouduProject.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jarchiesdk/jarchiesdk.iml" filepath="$PROJECT_DIR$/jarchiesdk/jarchiesdk.iml" />
     </modules>
   </component>
 </project>
