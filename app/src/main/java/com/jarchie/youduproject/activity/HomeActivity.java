@@ -32,7 +32,9 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     private MessageFragment mMessageFragment;
     private MineFragment mMineFragment;
     private Fragment mCurrent;
-
+    /**
+     * 底部的三个Tab按钮相关
+     */
     private RelativeLayout mHomeLayout;
     private RelativeLayout mPondLayout;
     private RelativeLayout mMessageLayout;
